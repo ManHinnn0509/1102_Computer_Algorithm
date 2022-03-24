@@ -64,10 +64,15 @@ def main():
     print(A)
     print(B)
 
-    M2 = multiply(r1, c1, A, r2, c2, B)
+    # M2 = multiply(r1, c1, A, r2, c2, B)
+    M2 = multiply(N, N, A, N, N, B)
     print(M2)
-
+    
+    # M2 is 32x32 matrix and it will return False
     print(M == M2)
+    
+    # What if we pad 0 to M and compare? It returns True
+    print(padMatrix(r3, c3, M, N) == M2)
 
     # Result: The method above works
 
