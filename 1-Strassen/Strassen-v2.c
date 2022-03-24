@@ -259,7 +259,11 @@ int main(void) {
 	enlarge(r1, c1, a1, N, A);
 	enlarge(r2, c2, a2, N, B);
 	
-	// printMatrix(N, N, A);
+	printf("\n--A--\n");
+	printMatrix(N, N, A);
+	
+	printf("\n--B--\n");
+	printMatrix(N, N, B);
 	
 	// int result[r1][c2];
 	
