@@ -1,4 +1,6 @@
 import math
+import time
+
 s1 = """
 11 4
 1075 1970 1026 1577 
@@ -76,6 +78,16 @@ def main():
 
     # Result: The method above works
 
+    # --- Output
+    printMatrix(M, True)
+
+    time.sleep(1)
+
+    printMatrix(M2, True)
+
+    print("--- End of Program ---")
+
+
 def padMatrix(r, c, M, N):
     M2 = [[0 for _ in range(N)] for _ in range(N)]
     for y in range(N):
@@ -135,6 +147,26 @@ def multiply(r1, c1, A, r2, c2, B):
                 M[x][y] += A[x][z] * B[z][y]
     return M
 
+def printMatrix(M, writeToFile=False):
+    r = len(M)
+    c = len(M[0])
+
+    s = ""
+
+    for y in range(r):
+        for x in range(c):
+            print(M[y][x], end=" ")
+            s += f"{M[y][x]} "
+
+        print("")
+        s += "\n"
+    
+    if (writeToFile):
+        import time
+        timestamp = str(time.time()).split(".")[0]
+        fileName = f"{timestamp}_output.txt"
+        with open(fileName, "w+") as f:
+            f.write(s)
 
 if (__name__ == "__main__"):
     main()

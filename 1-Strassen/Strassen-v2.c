@@ -34,6 +34,14 @@ void setSubMatrix(int n1, int n2, int iy, int ix, int a[][n2], int r[][n1]) {
 			r[j][i] = a[y][x];
 		}
 	}
+	
+	/*
+	printf("\n-- Original Matrix --\n");
+	printMatrix(n2, n2, a);
+	
+	printf("\n-- New Sub Matrix --\n");
+	printMatrix(n1, n1, r);
+	*/
 }
 
 // Matrix subtraction
@@ -96,13 +104,16 @@ void strassen(int n, int a[][n], int b[][n], int c[][n]) {
 		setSubMatrix(half, n, 0, 0, a, A11);
 		
 		int A12[half][half];
-		setSubMatrix(half, n, 0, 2, a, A12);
+		// setSubMatrix(half, n, 0, 2, a, A12);
+		setSubMatrix(half, n, 0, half, a, A12);
 		
 		int A21[half][half];
-		setSubMatrix(half, n, 2, 0, a, A21);
+		// setSubMatrix(half, n, 2, 0, a, A21);
+		setSubMatrix(half, n, half, 0, a, A21);
 		
 		int A22[half][half];
-		setSubMatrix(half, n, 2, 2, a, A22);
+		// setSubMatrix(half, n, 2, 2, a, A22);
+		setSubMatrix(half, n, half, half, a, A22);
 		
 		// ----- Matrix B
 		
@@ -110,13 +121,16 @@ void strassen(int n, int a[][n], int b[][n], int c[][n]) {
 		setSubMatrix(half, n, 0, 0, b, B11);
 		
 		int B12[half][half];
-		setSubMatrix(half, n, 0, 2, b, B12);
+		// setSubMatrix(half, n, 0, 2, b, B12);
+		setSubMatrix(half, n, 0, half, b, B12);
 		
 		int B21[half][half];
-		setSubMatrix(half, n, 2, 0, b, B21);
+		// setSubMatrix(half, n, 2, 0, b, B21);
+		setSubMatrix(half, n, half, 0, b, B21);
 		
 		int B22[half][half];
-		setSubMatrix(half, n, 2, 2, b, B22);
+		// setSubMatrix(half, n, 2, 2, b, B22);
+		setSubMatrix(half, n, half, half, b, B22);
 		
 		// -----
 		
@@ -220,6 +234,20 @@ void enlarge(int r, int c, int A[][c], int N, int C[][N]) {
 	}
 }
 
+void printMatrixPart(int r, int c, int M[][c], int N) {
+	int x, y;
+	for (y = 0; y < N; y++) {
+		for (x = 0; x < N; x++) {
+			if (y < r && x < c) {
+				printf("%d ", M[y][x]);
+			}
+		}
+		if (y < N && y != r - 1) {
+			puts("");
+		}
+	}
+}
+
 int main(void) {
 	
 	int x, y, z;
@@ -259,23 +287,41 @@ int main(void) {
 	enlarge(r1, c1, a1, N, A);
 	enlarge(r2, c2, a2, N, B);
 	
+	/*
 	printf("\n--A--\n");
 	printMatrix(N, N, A);
 	
 	printf("\n--B--\n");
 	printMatrix(N, N, B);
+	*/
 	
-	// int result[r1][c2];
-	
-	// Print ans
+	// Print ans	
 	if (signal == 0) {
 		// strassen(r1, a1, a2, result);
 		strassen(N, A, B, result);
 		
 		printf("%d %d \n\n", r1, c2);
 		
-		// printMatrix(r1, c2, result);
+		int C[r1][c2];
+		for (y = 0; y < r1; y++) {
+			for (x = 0; x < c2; x++) {
+				C[y][x] = result[y][x];
+			}
+		}
+		
+		// WTF THIS DOESNT WORK AND WTF?
+		// Something to do with pointer or etc????
+		/*
+		printf("\n--- N x N (N = %d)---\n", N);
 		printMatrix(N, N, result);
+
+		printf("\n--- r1=%d x c2=%d ---\n", r1, c2);
+		printMatrix(r1, c2, result);
+		*/
+		
+		// printMatrixPart(r1, c2, result, N);
+		
+		printMatrix(r1, c2, C);
 	}
 	
 	// Print time
@@ -293,6 +339,8 @@ int main(void) {
 	
 	return 0;
 }
+
+
 
 void scanInput(int row, int col, int a[][col]) {
 	int x, y;
@@ -313,11 +361,16 @@ void scanInput(int row, int col, int a[][col]) {
 
 // For checking if the input is correct
 void printMatrix(int row, int col, int m[][col]) {
-	int x, y;
+	int x = 0;
+	int y = 0;
 	
 	for (y = 0; y < row; y++) {
+		// printf("y = %d | ", y);
+		
 		for (x = 0; x < col; x++) {
+			// printf("M[%d][%d] | ", y, x);
 			printf("%d ", m[y][x]);
+			// puts("");
 		}
 		if (y != row - 1) {
 			puts("");
