@@ -3,80 +3,33 @@
 #include <time.h>
 #include <math.h>
 
+/*
+	Link to Github: https://github.com/ManHinnn0509/1102_Computer_Algorithm/tree/main/1-Strassen
+*/
+
 void printMatrix(int row, int col, int m[][col]);
 void scanInput(int row, int col, int a[][col]);
+void setSubMatrix(int n1, int n2, int iy, int ix, int a[][n2], int r[][n1]);
+void subtractMatrix(int n, int a[][n], int b[][n], int c[][n]);
+void addMatrix(int n, int a[][n], int b[][n], int c[][n]);
+void joinMatrix(int n1, int n2, int iy, int ix, int a[][n1], int r[][n2]);
 
-/*
-The parameters are little fucked up
-Heres a note for myself:
+// Useless
+void printMatrixPart(int r, int c, int M[][c], int N);
 
-n1 <- Length of NEW array
-n2 <- Length of original array
-
-iy <- Starting index (y dir)
-ix <- Starting index (x dir)
-
-a[][] <- Original array
-r[][] <- Result array
-*/
-void setSubMatrix(int n1, int n2, int iy, int ix, int a[][n2], int r[][n1]) {
-	/*
-	r[0][0] = a[iy][ix];
-	r[0][1] = a[iy][ix + 1];
-	r[1][0] = a[iy + 1][ix];
-	r[1][1] = a[iy + 1][ix + 1];
-	*/
-	
-	int x, y;
-	int i, j;
-	for (y = iy, j = 0; y < n2 && j < n1; y++, j++) {
-		for (x = ix, i = 0; x < n2 && i < n1; x++, i++) {
-			r[j][i] = a[y][x];
-		}
-	}
-	
-	/*
-	printf("\n-- Original Matrix --\n");
-	printMatrix(n2, n2, a);
-	
-	printf("\n-- New Sub Matrix --\n");
-	printMatrix(n1, n1, r);
-	*/
+// -.-
+int max(int a, int b) {
+	return (a > b ? a : b);
 }
 
-// Matrix subtraction
-void subtractMatrix(int n, int a[][n], int b[][n], int c[][n]) {
-	int x, y;
-	
-	for (y = 0; y < n; y++) {
-		for (x = 0; x < n; x++) {		
-			c[y][x] = a[y][x] - b[y][x];
-		}
-	}
+// Find nearest number thats 2^n
+int findNearest(n) {
+	double d = log2(n);
+	int c = ceil(d);
+	return (int) pow(2, c);
 }
 
-// Matrix addition
-void addMatrix(int n, int a[][n], int b[][n], int c[][n]) {
-	int x, y;
-	
-	for (y = 0; y < n; y++) {
-		for (x = 0; x < n; x++) {		
-			c[y][x] = a[y][x] + b[y][x];
-		}
-	}
-}
-
-void joinMatrix(int n1, int n2, int iy, int ix, int a[][n1], int r[][n2]) {
-	int x1, y1;
-	int x2, y2;
-	
-	for (y1 = 0, y2 = iy; y1 < n1; y1++, y2++) {
-		for (x1 = 0, x2 = ix; x1 < n1; x1++, x2++) {
-			r[y2][x2] = a[y1][x1];
-		}
-	}
-}
-
+// Should I free memory ?
 void strassen(int n, int a[][n], int b[][n], int c[][n]) {
 	// printf("\n--- strassen - n = %d ---\n", n);
 	// Calc it directly
@@ -209,16 +162,7 @@ void strassen(int n, int a[][n], int b[][n], int c[][n]) {
 	}
 }
 
-int max(int a, int b) {
-	return (a > b ? a : b);
-}
-
-int findNearest(n) {
-	double d = log2(n);
-	int c = ceil(d);
-	return (int) pow(2, c);
-}
-
+// Make m * x matrix to N * N matrix, also pad zeros to it
 void enlarge(int r, int c, int A[][c], int N, int C[][N]) {
 	int x, y;
 	for (y = 0; y < N; y++) {
@@ -230,20 +174,6 @@ void enlarge(int r, int c, int A[][c], int N, int C[][N]) {
 			else {
 				C[y][x] = 0;
 			}
-		}
-	}
-}
-
-void printMatrixPart(int r, int c, int M[][c], int N) {
-	int x, y;
-	for (y = 0; y < N; y++) {
-		for (x = 0; x < N; x++) {
-			if (y < r && x < c) {
-				printf("%d ", M[y][x]);
-			}
-		}
-		if (y < N && y != r - 1) {
-			puts("");
 		}
 	}
 }
@@ -376,5 +306,91 @@ void printMatrix(int row, int col, int m[][col]) {
 			puts("");
 		}
 		
+	}
+}
+
+/*
+The parameters are little fucked up
+Heres a note for myself:
+
+n1 <- Length of NEW array
+n2 <- Length of original array
+
+iy <- Starting index (y dir)
+ix <- Starting index (x dir)
+
+a[][] <- Original array
+r[][] <- Result array
+*/
+void setSubMatrix(int n1, int n2, int iy, int ix, int a[][n2], int r[][n1]) {
+	/*
+	r[0][0] = a[iy][ix];
+	r[0][1] = a[iy][ix + 1];
+	r[1][0] = a[iy + 1][ix];
+	r[1][1] = a[iy + 1][ix + 1];
+	*/
+	
+	int x, y;
+	int i, j;
+	for (y = iy, j = 0; y < n2 && j < n1; y++, j++) {
+		for (x = ix, i = 0; x < n2 && i < n1; x++, i++) {
+			r[j][i] = a[y][x];
+		}
+	}
+	
+	/*
+	printf("\n-- Original Matrix --\n");
+	printMatrix(n2, n2, a);
+	
+	printf("\n-- New Sub Matrix --\n");
+	printMatrix(n1, n1, r);
+	*/
+}
+
+// Matrix subtraction
+void subtractMatrix(int n, int a[][n], int b[][n], int c[][n]) {
+	int x, y;
+	
+	for (y = 0; y < n; y++) {
+		for (x = 0; x < n; x++) {		
+			c[y][x] = a[y][x] - b[y][x];
+		}
+	}
+}
+
+// Matrix addition
+void addMatrix(int n, int a[][n], int b[][n], int c[][n]) {
+	int x, y;
+	
+	for (y = 0; y < n; y++) {
+		for (x = 0; x < n; x++) {		
+			c[y][x] = a[y][x] + b[y][x];
+		}
+	}
+}
+
+void joinMatrix(int n1, int n2, int iy, int ix, int a[][n1], int r[][n2]) {
+	int x1, y1;
+	int x2, y2;
+	
+	for (y1 = 0, y2 = iy; y1 < n1; y1++, y2++) {
+		for (x1 = 0, x2 = ix; x1 < n1; x1++, x2++) {
+			r[y2][x2] = a[y1][x1];
+		}
+	}
+}
+
+// Useless
+void printMatrixPart(int r, int c, int M[][c], int N) {
+	int x, y;
+	for (y = 0; y < N; y++) {
+		for (x = 0; x < N; x++) {
+			if (y < r && x < c) {
+				printf("%d ", M[y][x]);
+			}
+		}
+		if (y < N && y != r - 1) {
+			puts("");
+		}
 	}
 }
